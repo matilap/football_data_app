@@ -1,10 +1,7 @@
 import streamlit as st
-from streamlit.runtime.scriptrunner import add_script_run_ctx
 import pandas as pd
 from statsbombpy import sb
-
 from constants.const import SELECTBOX_DEFAULT
-from concurrent.futures import ThreadPoolExecutor
 import itertools
 
 
@@ -69,7 +66,7 @@ def get_match_ids(matches, indexes):
             ids.append(int(match_id[0]))
     return ids
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def get_players_of_team(match_id, team_names):
     match_id = int(str(match_id).strip("""[ ] ' ' """))
     team_names = [str(team_name).strip("""[ ]  " " ' ' """) for team_name in team_names]
@@ -99,15 +96,8 @@ def get_stats(match_id, player_name):
     player_events = events[(events['player'] == player_name)]
     return player_events
 
-
-
-
-
 matches = sb.matches(competition_id=selected_comp_id, season_id=selected_season_id)[['match_id','home_team', 'away_team', 'home_score', 'away_score']]
 matches['score'] = matches.home_score.astype(str) + ' - ' + matches.away_score.astype(str)
-
-
-
 
 teams = matches[['home_team']].drop_duplicates().values.tolist()
 teams_away = matches[['away_team']].drop_duplicates().values.tolist()
@@ -145,20 +135,12 @@ else:
     selected_matches = match_container.multiselect('Select Matches:', match_options)
     selected_indexes = [options[match] for match in selected_matches]
 
-
-
-
-
-
 if selected_indexes != []:
     match_ids = showcase_selections(selected_indexes, matches)
+   
     with st.spinner("Searching the players"):
-
-        with ThreadPoolExecutor() as executor:
-            selectable_players = executor.map(get_players_of_team, match_ids, itertools.repeat(selected_team))
-            selectable_players = list(set(itertools.chain.from_iterable(selectable_players)))
-            for t in executor._threads:
-                add_script_run_ctx(t)
+        selectable_players =  [get_players_of_team(match_id, selected_team) for match_id in match_ids]
+        selectable_players = list(set(itertools.chain.from_iterable(selectable_players)))
         
 
     selectable_players.insert(0, SELECTBOX_DEFAULT)
@@ -172,6 +154,8 @@ if selected_indexes != []:
             st.session_state["selected_player"] = selected_player
             st.session_state["player_stats"] = player_stats
             st.session_state["selected_matches"] = selected_indexes
+
+
 
 
 
