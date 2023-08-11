@@ -154,6 +154,7 @@ if selected_indexes != []:
             st.session_state["selected_player"] = selected_player
             st.session_state["player_stats"] = player_stats
             st.session_state["selected_matches"] = selected_indexes
+            st.write("Stats searched succesfully. Navigate to Pass and Shots pages.")
 
 
 
