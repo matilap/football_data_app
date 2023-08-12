@@ -145,8 +145,7 @@ def filter_stats(player_events, conditions):
 def heat_map(every_pass, field, ax, pitch):
         try:
             pitch.kdeplot(x=every_pass['start_x'], y=every_pass['start_y'], ax=ax,
-                        shade=True,
-                        shade_lowest=False,
+                        fill=True,
                         cmap='light:b',
                         n_levels=5,
                         alpha=.5,
