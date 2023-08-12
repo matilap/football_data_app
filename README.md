@@ -1,6 +1,6 @@
 # Statsbombpy Data Visualisation App
 
-This is a Streamlit web application that utilizes the Statsbombpy library to visualise free football match data on a player level. Have a look at it from [here](https://footballdataapp-hb9zf2sbzykarytrgkc3qp.streamlit.app/).
+This is a Streamlit web application that utilizes the Statsbombpy library to visualise free football match data on a player level. Have a look at it from [here](https://footballdataapp-qlywqyjvf3pfbxfefmi4wn.streamlit.app/).
 
 ## Features
 
